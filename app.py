@@ -1,4 +1,3 @@
-
 from flask import Flask, jsonify
 from datetime import datetime, timezone
 import json
@@ -15,7 +14,7 @@ arduino = None
 serial_lock = threading.Lock()
 
 
-def read_soil_sensor():
+def read_sensor_data():
     global arduino
 
     with serial_lock:
@@ -28,7 +27,6 @@ def read_soil_sensor():
                 )
 
             # Arduino sends one JSON reading per line.
-            # Ignore any malformed or empty lines.
             while True:
                 line = arduino.readline().decode(
                     "utf-8", errors="replace"
@@ -40,16 +38,41 @@ def read_soil_sensor():
                 try:
                     data = json.loads(line)
                 except json.JSONDecodeError:
+                    # Ignore malformed or incomplete serial lines.
                     continue
 
-                if "soil_raw" not in data:
+                if not isinstance(data, dict):
                     continue
 
-                value = int(data["soil_raw"])
-                if not 0 <= value <= 1023:
+                # Validate soil moisture reading.
+                try:
+                    soil_raw = int(data["soil_raw"])
+                except (KeyError, TypeError, ValueError):
                     continue
 
-                return value
+                if not 0 <= soil_raw <= 1023:
+                    continue
+
+                # Read DS18B20 temperature.
+                temperature_c = data.get("temperature_c")
+
+                if temperature_c is not None:
+                    try:
+                        temperature_c = float(temperature_c)
+                    except (TypeError, ValueError):
+                        temperature_c = None
+
+                    # DS18B20 operating range is -55 to 125 °C.
+                    if (
+                        temperature_c is not None
+                        and not -55 <= temperature_c <= 125
+                    ):
+                        temperature_c = None
+
+                return {
+                    "soil_raw": soil_raw,
+                    "temperature_c": temperature_c
+                }
 
         except (serial.SerialException, OSError, TimeoutError):
             if arduino is not None:
@@ -78,16 +101,19 @@ def health():
 @app.get("/sensor")
 def sensor():
     try:
-        soil_raw = read_soil_sensor()
+        data = read_sensor_data()
+
         return jsonify({
-            "sensor": "capacitive-soil-moisture",
-            "soil_raw": soil_raw,
+            "sensor": "capacitive-soil-moisture-and-DS18B20",
+            "soil_raw": data["soil_raw"],
+            "temperature_c": data["temperature_c"],
             "timestamp": datetime.now(timezone.utc).isoformat()
         })
+
     except (serial.SerialException, OSError, TimeoutError) as e:
-        app.logger.exception("Arduino soil sensor read failed")
+        app.logger.exception("Arduino sensor read failed")
         return jsonify({
-            "error": "Unable to read Arduino soil sensor-n",
+            "error": "Unable to read Arduino sensors",
             "details": str(e),
             "serial_port": SERIAL_PORT
         }), 503
