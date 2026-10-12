@@ -1,4 +1,12 @@
 Flask>=3.1,<4
+pyserial>=3.5,<4
+
+# Direct-sensor hardware (Raspberry Pi only; imported lazily so the package
+# still runs in simulation on any machine without them).
 adafruit-blinka
 adafruit-circuitpython-ads1x15
-pyserial>=3.5,<4
+w1thermsensor
+RPi.GPIO ; platform_machine == "armv7l" or platform_machine == "aarch64"
+
+# Development / test only.
+pytest>=8,<10
