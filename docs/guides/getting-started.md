@@ -287,4 +287,7 @@ You are set up correctly if **all** of these are true:
 If `/sensors` shows `"ok": false`, you are probably **not** in simulation — make sure
 `SIMULATE` is set to `true` in the terminal that runs `app.py`.
 
-Next: add your own sensor in [adding-a-sensor.md](adding-a-sensor.md).
+Next steps:
+- Add your own sensor — [adding-a-sensor.md](adding-a-sensor.md).
+- Write and run tests for it — [testing.md](testing.md).
+- Deploy to real hardware — [running-on-raspberry-pi.md](running-on-raspberry-pi.md).

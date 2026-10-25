@@ -68,6 +68,8 @@ Docs are grouped by **level**, from the big picture down to exact details:
 | [guides/removing-a-device.md](guides/removing-a-device.md) | Remove a sensor or actuator cleanly. |
 | [guides/configuring-rules.md](guides/configuring-rules.md) | Set target ranges, decision rules, and safety limits. |
 | [guides/simulation-and-dry-run.md](guides/simulation-and-dry-run.md) | Test safely without a farm. |
+| [guides/testing.md](guides/testing.md) | Run the suite, and write tests for a new sensor/actuator with the fakes. |
+| [guides/running-on-raspberry-pi.md](guides/running-on-raspberry-pi.md) | Deploy to real hardware: wiring, interfaces, dry-run → live, systemd, Docker. |
 
 ---
 

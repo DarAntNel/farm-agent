@@ -23,6 +23,7 @@ from farm_agent.control.controller import ActuatorController
 from farm_agent.control.cycle import ControlCycle
 from farm_agent.control.strategy import build_strategy
 from farm_agent.events.store import build_event_store
+from farm_agent.k8s_token import resolve_api_token
 from farm_agent.safety.guard import SafetyGuard
 from farm_agent.safety.watchdog import Watchdog
 from farm_agent.sensors.hub import SensorHub
@@ -82,6 +83,6 @@ def build_system(*, simulate: bool | None = None, dry_run: bool | None = None):
     cycle = ControlCycle(hub, controller, strategy, policy, event_store)
 
     app = create_app(
-        hub, controller, cycle, event_store, api_token=os.getenv("API_TOKEN")
+        hub, controller, cycle, event_store, api_token=resolve_api_token()
     )
     return app, cycle, controller, hub, event_store

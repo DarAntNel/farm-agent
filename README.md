@@ -75,7 +75,8 @@ Full, human-readable docs live in [docs/](docs/README.md):
 - **Architecture** — the big picture, design decisions, and the safety model.
 - **Modules** — one step-by-step doc per module.
 - **Guides** — getting started, adding/removing devices, configuring rules,
-  simulation & dry-run.
+  simulation & dry-run, [testing](docs/guides/testing.md), and
+  [running on a Raspberry Pi](docs/guides/running-on-raspberry-pi.md).
 - **Reference** — API endpoints, built-in sensor/actuator types, config schema.
 
 The authoritative design spec is in

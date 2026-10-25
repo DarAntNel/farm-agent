@@ -32,10 +32,10 @@ DEFAULT_WIRING: dict[str, Any] = {
     ],
     "actuators": [
         {
-            "type": "relay",
+            "type": "serial_actuator",
             "id": "pump_1",
             "name": "Water pump",
-            "pin": 17,
+            "command": "pump",
         },
     ],
     "event_store": {"kind": "memory"},

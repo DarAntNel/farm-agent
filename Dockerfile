@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY farm_agent/ ./farm_agent/
 
+
 # Writable directory for runtime files (e.g. a jsonl event store path set via
 # WIRING_CONFIG), since the non-root user can't write to /app itself.
 RUN useradd --system --uid 10001 appuser \
