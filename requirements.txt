@@ -6,7 +6,10 @@ pyserial>=3.5,<4
 adafruit-blinka
 adafruit-circuitpython-ads1x15
 w1thermsensor
-RPi.GPIO ; platform_machine == "armv7l" or platform_machine == "aarch64"
+# rpi-lgpio is a pure-wheel, drop-in replacement for RPi.GPIO (same
+# `import RPi.GPIO` API), so it needs no C compiler in the image and also
+# supports the Pi 5. Imported lazily by the relay actuator.
+rpi-lgpio ; platform_machine == "armv7l" or platform_machine == "aarch64"
 
 # Development / test only.
 pytest>=8,<10
